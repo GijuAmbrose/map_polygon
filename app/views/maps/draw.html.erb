@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+  <style>
+    #map{position: absolute;top: 0; bottom: 0;left: 0;right: 0;}
+    .button {
+      z-index: 1050;
+      position: absolute;
+      top: 10px;
+      left: 50px;
+      font: bold 16px Arial;
+      text-decoration: none;
+      background-color: #EEEEEE;
+      color: #1e1c1c;
+      background-color: red;
+      padding: 2px 6px 2px 6px;
+      border-top: 1px solid #CCCCCC;
+      border-right: 1px solid #333333;
+      border-bottom: 1px solid #333333;
+      border-left: 1px solid #CCCCCC;
+    }
+  </style>>
+  <h1>Map</h1>
+<title>Map</title>
+</head>
+<body >
+  <div id="map"></div>
+  <%=link_to "view coordinates", maps_coordinates_path, :class=> "button"%>
+  <script>
+    var map = L.map('map', {drawControl: false}).setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=qWbZ9BODmqrW1whmVKLb', {
+      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',}).addTo(map);
+    var editableLayers = L.featureGroup().addTo(map);
+    map.on('draw:created', function(e) {
+      var type = e.layerType,
+        layer = e.layer;
+        editableLayers.addLayer(layer);
+    });
+    var drawControl = new L.Control.Draw({
+      edit: {
+        featureGroup: editableLayers
+      },
+      draw: {
+        rectangle: false,
+        polyline: false,
+        circle: false,
+        marker: false
+      }
+    }).addTo(map);
+    map.addControl(drawControl);
+
+    map.on('draw:created', function (e) {
+    var type = e.layerType;
+    var layer = e.layer;
+
+    var shape = layer.toGeoJSON()
+    var shape_for_db = JSON.stringify(shape.geometry.coordinates);
+    debugger
+
+    $.ajax({
+    url: "/maps/save_coordinates",
+    type: 'GET',
+    data: { value: shape_for_db },
+    success: function(data) {
+      //called when successful
+    },
+    error: function(e) {
+    }
+    });
+
+
+  });
+
+  </script>
+</body>
+</html>

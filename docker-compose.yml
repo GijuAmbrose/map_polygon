@@ -1,0 +1,18 @@
+version: '3'
+services:
+  database:
+    image: 'mongo'
+    container_name: 'my-mongo-container'
+    environment:
+      - MONGO_INITDB_DATABASE=draw_map_mongo_development\
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
+    ports:
+      - '27017-27091:27017-27019'
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/DockerFile
+    depends_on:
+      - database

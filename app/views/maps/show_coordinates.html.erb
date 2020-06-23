@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+  <title>Co-ordinates</title>
+</head>
+<body>
+<table>
+  <tr>
+    <th>coordinates</th>
+  </tr>
+  <% @record.each do |value|%>
+      <tr><td><%=value.coordinates%></td></tr>
+    <tr>
+  <%end%>
+    </tr>
+</table>
+</body>
+</html>
