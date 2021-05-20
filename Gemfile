@@ -9,7 +9,7 @@ gem 'mongoid', git: 'https://github.com/mongodb/mongoid.git'
 gem 'bson_ext'
 gem 'gmaps4rails'
 # Use Puma as the app server
-gem 'puma', '~> 4.1'
+gem 'puma', '~> 4.3'
 gem 'jquery-rails'
 gem 'pry'
 gem 'rspec-rails', '~> 4.0.0.beta2'
